@@ -31,8 +31,8 @@ resource "azurerm_app_service_plan" "appsp" {
   location            = azurerm_resource_group.rg.location
   # os_type             = "Linux"
   # sku_name            = "F1"
-  kind                = "Linux"
-  reserved            = "true"
+  kind     = "Linux"
+  reserved = "true"
   sku {
     tier = "Standard"
     size = "F1"
