@@ -1,4 +1,4 @@
 /.terraform.lock.hcl
 /.terraform
 resource/
-/.outputs.tf
+/.outputs1.tf
