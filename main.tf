@@ -21,28 +21,28 @@ resource "random_integer" "ri" {
 
 # Create a resource group
 resource "azurerm_resource_group" "rg" {
-  name     = ${var.resource_group_name}
-  location = ${var.resource_group_location}
+  name     = var.resource_group_name
+  location = var.resource_group_location
 }
 
 resource "azurerm_app_service_plan" "appsp" {
-  name                = ${var.app_service_plan_name}
+  name                = var.app_service_plan_name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  os_type = "Linux"
-  sku_name = "F1"
-  # kind                = "Linux"
-  # reserved            = "true"
-  # sku {
-  #   tier = "Standard"
-  #   size = "F1"
-  # }
+  # os_type             = "Linux"
+  # sku_name            = "F1"
+  kind                = "Linux"
+  reserved            = "true"
+  sku {
+    tier = "Standard"
+    size = "F1"
+  }
 }
 
 resource "azurerm_linux_web_app" "webapp" {
-  name                = ${var.app_service_name}
-  resource_group_name = ${var.resource_group_name}
-  location            = ${var.resource_group_location}
+  name                = var.app_service_name
+  resource_group_name = var.resource_group_name
+  location            = var.resource_group_location
   service_plan_id     = azurerm_app_service_plan.appsp.id
   https_only          = true
   site_config {
@@ -63,22 +63,22 @@ resource "azurerm_linux_web_app" "webapp" {
 #  Deploy code from a public GitHub repo
 resource "azurerm_app_service_source_control" "sourcecontrol" {
   app_id                 = azurerm_linux_web_app.webapp.id
-  repo_url               = ${var.repo_url}
+  repo_url               = var.repo_url
   branch                 = "main"
   use_manual_integration = true
 }
 
 resource "azurerm_mssql_server" "sqlserver" {
-  name                         = ${var.sql_server_name}
-  resource_group_name          = ${var.resource_group_name}
-  location                     = ${var.resource_group_location}
+  name                         = var.sql_server_name
+  resource_group_name          = var.resource_group_name
+  location                     = var.resource_group_location
   version                      = "12.0"
-  administrator_login          = ${var.sql_admin_login}
-  administrator_login_password = ${var.sql_admin_password}
+  administrator_login          = var.sql_admin_login
+  administrator_login_password = var.sql_admin_password
 }
 
 resource "azurerm_mssql_database" "sqldatabase" {
-  name           = ${var.sql_database_name}
+  name           = var.sql_database_name
   server_id      = azurerm_mssql_server.sqlserver.id
   collation      = "SQL_Latin1_General_CP1_CI_AS"
   license_type   = "LicenseIncluded"
@@ -91,7 +91,7 @@ resource "azurerm_mssql_database" "sqldatabase" {
 }
 
 resource "azurerm_mssql_firewall_rule" "sqlrule" {
-  name             = ${var.firewall_rule_name}
+  name             = var.firewall_rule_name
   server_id        = azurerm_mssql_server.sqlserver.id
   start_ip_address = "0.0.0.0"
   end_ip_address   = "0.0.0.0"
