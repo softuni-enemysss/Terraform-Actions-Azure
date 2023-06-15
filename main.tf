@@ -29,12 +29,14 @@ resource "azurerm_app_service_plan" "appsp" {
   name                = ${var.app_service_plan_name}
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  kind                = "Linux"
-  reserved            = "true"
-  sku {
-    tier = "Standard"
-    size = "F1"
-  }
+  os_type = "Linux"
+  sku_name = "F1"
+  # kind                = "Linux"
+  # reserved            = "true"
+  # sku {
+  #   tier = "Standard"
+  #   size = "F1"
+  # }
 }
 
 resource "azurerm_linux_web_app" "webapp" {
